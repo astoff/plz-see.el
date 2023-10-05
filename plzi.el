@@ -116,20 +116,20 @@ The car is the number of buffers created so far.")
 (defvar plzi-header-line-content-type
   '(:eval
     (setq-local plzi-header-line-content-type
-                (format " | %s"
-                        (alist-get 'content-type
-                                   (plz-response-headers plzi-response))))))
+                (when-let ((ct (alist-get 'content-type
+                                          (plz-response-headers plzi-response))))
+                  (format " | %s" ct)))))
 
 (defvar plzi-header-line-content-length
   '(:eval
     (setq-local plzi-header-line-content-length
-                (format " | %s bytes"
-                        (alist-get 'content-length
-                                   (plz-response-headers plzi-response))))))
+                (when-let ((len (alist-get 'content-length
+                                           (plz-response-headers plzi-response))))
+                  (format " | %s bytes" len)))))
 
 (defvar plzi-header-line-show-headers
   '(:eval
-    (setq-local plzi-header-line-show
+    (setq-local plzi-header-line-show-headers
                 (format " | %s"
                         (buttonize "show headers"
                                    (lambda (buffer)
@@ -145,9 +145,9 @@ The car is the number of buffers created so far.")
          (error (and (plz-error-p response) response))
          (response (if error (plz-error-response error) response))
          (headers (plz-response-headers response))
-         (mode (alist-get (alist-get 'content-type headers)
-                          plzi-content-type-alist
-                          nil nil #'string-match-p))
+         (mode (when-let ((ct (alist-get 'content-type headers)))
+                 (alist-get ct plzi-content-type-alist
+                            nil nil #'string-match-p)))
          (body (plz-response-body response)))
     (with-current-buffer buffer
       (save-excursion
