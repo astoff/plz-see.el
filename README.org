@@ -5,6 +5,8 @@ library.  It is interactive in the sense that request responses are
 pretty-printed in a pop-up buffer.  It can be used to explore and test
 web APIs or to debug packages that use =plz=.
 
+#+html: <img src="https://raw.githubusercontent.com/astoff/plz-see.el/images/screenshot.png">
+
 The main function provided by the package is unsurprisingly named
 =plz-see=, which has the essentially the same API as =plz=.  See the
 docstring for details on the differences.
