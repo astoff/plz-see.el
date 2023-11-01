@@ -44,8 +44,8 @@
 
 (defcustom plz-see-base-url nil
   "Prefix to add to the URL argument of `plz-see', if relative.
-Here \"relative\" means, paradoxically, that the URL in question
-starts with '/'."
+Relative here means, paradoxically, that the URL in question
+starts with \"/\"."
   :local t
   :type '(choice string (const :tag "None" nil))
   :safe #'stringp)
@@ -243,8 +243,11 @@ Interactively, N is the prefix argument."
                    &allow-other-keys)
   "Request METHOD from URL with curl and display the result in a buffer.
 
+If URL starts with \"/\", prepend `plz-see-base-url' to it.
+
 HEADERS may be an alist of extra headers to send with the
-request.
+request.  Headers listed under `plz-see-base-headers' are
+included by default.
 
 BODY may be a string, a buffer, or a list like `(file FILENAME)'
 to upload a file from disk.
