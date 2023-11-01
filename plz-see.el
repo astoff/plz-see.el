@@ -231,6 +231,10 @@ Interactively, N is the prefix argument."
         (display-buffer hbuffer)
       (setq-local plz-see-header-line-show-headers nil))))
 
+(put 'plz-see-insert-headers
+     'completion-predicate
+     (lambda (_ buffer) (buffer-local-value 'plz-see-response buffer)))
+
 ;;;###autoload
 (cl-defun plz-see (method
                    url
