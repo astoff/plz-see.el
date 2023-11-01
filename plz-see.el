@@ -1,9 +1,12 @@
 ;;; plz-see.el --- Interactive HTTP client              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2023  Augusto Stoffel
+;; Copyright (C) 2023  Free Software Foundation, Inc.
 
 ;; Author: Augusto Stoffel <arstoffel@gmail.com>
+;; URL: https://github.com/astoff/plz-see.el
 ;; Keywords: comm, network, http
+;; Package-Requires: ((emacs "29.1") (plz "0.7"))
+;; Version: 0.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
