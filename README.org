@@ -65,8 +65,8 @@ server response, and store it in the default headers for future use.
                  (lambda (r)
                    (with-current-buffer buffer
                      (let ((token (alist-get 'access_token r)))
-                       (setq plz-see-base-headers
-                             `(("Authorization" . ,(concat "Bearer " token)))))))))
+                       (setq-local plz-see-base-headers
+                                   `(("Authorization" . ,(concat "Bearer " token)))))))))
 
 (plz-see 'get "/authenticated")  ; Yay!
 #+end_src

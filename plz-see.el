@@ -46,7 +46,6 @@
   "Prefix to add to the URL argument of `plz-see', if relative.
 Relative here means, paradoxically, that the URL in question
 starts with \"/\"."
-  :local t
   :type '(choice string (const :tag "None" nil))
   :safe #'stringp)
 
@@ -54,7 +53,6 @@ starts with \"/\"."
   "List of headers to add to all requests.
 Entries of this alist are ignored if the same header is given
 explicitly in the HEADERS argument of `plz-see'."
-  :local t
   :type '(alist :key-type string :value-type string)
   :safe #'listp)
 
