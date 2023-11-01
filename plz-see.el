@@ -20,12 +20,20 @@
 
 ;;; Commentary:
 
-;; 
+;; `plz-see' is an interactive HTTP client for Emacs based on the
+;; `plz' library.  It is interactive in the sense that request
+;; responses are pretty-printed in a pop-up buffer.  It can be used to
+;; explore and test web APIs or to debug packages that use plz.
+;;
+;; See function `plz-see' for more details and the package
+;; customization group for all available user options.
+
 
 ;;; Code:
 
 (require 'json)
 (require 'plz)
+(eval-when-compile (require 'cl-lib))
 
 ;;; User options and variables
 
@@ -55,18 +63,16 @@ explicitly in the HEADERS argument of `plz-see'."
 If nil, never delete old response buffers."
   :type '(choice natnum (const :tag "Keep all" nil)))
 
-(defcustom plz-see-display-action nil
+(defcustom plz-see-display-action '(nil)
   "The ACTION argument `plz-see' passes to `display-buffer'."
-  :type 'sexp)
+  :type display-buffer--action-custom-type)
 
 (defcustom plz-see-header-line-format
-  (let ((headers '(plz-see-header-line-status
-                   plz-see-header-line-content-type
-                   plz-see-header-line-content-length
-                   plz-see-header-line-show-headers)))
-    (dolist (sym headers)
-      (put sym 'risky-local-variable t))
-    (cons "" headers))
+  '(" "
+    plz-see-header-line-status
+    plz-see-header-line-content-type
+    plz-see-header-line-content-length
+    plz-see-header-line-show-headers)
   "Header line format for `plz-see' result buffers."
   :type 'sexp)
 
@@ -103,6 +109,11 @@ or a buffer name to use a separate buffer."
 The car is the number of buffers created so far.")
 
 ;;; Response buffer header line
+
+(put 'plz-see-header-line-status         'risky-local-variable t)
+(put 'plz-see-header-line-content-type   'risky-local-variable t)
+(put 'plz-see-header-line-content-length 'risky-local-variable t)
+(put 'plz-see-header-line-show-headers   'risky-local-variable t)
 
 (defvar plz-see-header-line-status
   '(:eval
@@ -181,7 +192,7 @@ call and AS specifies the argument type they expect."
                      ('response response)
                      ('buffer buffer)
                      ((or 'binary 'string 'file `(file ,_))
-                      (user-error "plz-see does not accept :as %s" as))
+                      (user-error "`plz-see' does not accept :as %s" as))
                      ((pred functionp)
                       (with-temp-buffer
                         (insert (plz-response-body response))
